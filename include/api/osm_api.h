@@ -1,6 +1,6 @@
 /**
- * @file traffic_api.h
- * @brief Header file for Traffic API
+ * @file osm_api.h
+ * @brief Header file for Location API
  * @author Karlo Siric
  * @version 1.0.0
  * @date 2025-06-12
@@ -35,8 +35,8 @@
 
 
 
-#ifndef TRAFFIC_API_H
-#define TRAFFIC_API_H 
+#ifndef OSM_API_H
+#define OSM_API_H 
 
 #include <curl/curl.h>
 #include <cjson/cJSON.h>
@@ -44,8 +44,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
+#include <errno.h>
 
 typedef struct {
     char *data;
@@ -68,6 +67,13 @@ typedef struct {
 } s_LocationList;
 
 int fetch_osm_data(const char *url, s_API_Response *response);
+s_LocationList *create_location_list(size_t initial_capacity);
+int parse_osm_data(const char *data, s_LocationList *location_list);
+void free_location_list(s_LocationList *location_list);
+s_Location *get_location_by_id(s_LocationList *location_list, int id);
+
+
+
 void free_api_response(s_API_Response *response);
 
 #endif
