@@ -28,3 +28,6 @@ dist/
 # Temporary files
 tmp/
 temp/
+
+# Header backup files
+include/**/*.h~

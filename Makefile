@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -g -02
+CFLAGS = -Wall -Wextra -std=c99 -g -02 -Iinclude
 LIBS = `pkg-config --cflags --libs cairo gtk+-3.0` -lcurl -lsqlite3 -lcjson
 
 # DIRECTORIES
