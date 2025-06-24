@@ -1,0 +1,30 @@
+# Compiled binaries
+split_optimizer
+*.exe
+
+# Object files
+obj/
+*.o
+*.obj
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE files
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+build/
+dist/
+
+# Log files
+*.log
+
+# Temporary files
+tmp/
+temp/
