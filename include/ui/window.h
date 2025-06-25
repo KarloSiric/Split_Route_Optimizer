@@ -21,7 +21,7 @@ typedef struct {
     cairo_surface_t *map_surface;
 
     gboolean is_dragging;
-    double last_moust_x, last_mouse_y;
+    double last_mouse_x, last_mouse_y;
 
 } s_MapApp;
 
