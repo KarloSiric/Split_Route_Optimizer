@@ -41,5 +41,8 @@ run: $(TARGET)
 test: src/test_api.c src/api/osm_api.c
 	$(CC) $(CFLAGS) src/test_api.c src/api/osm_api.c -o test_osm $(LIBS)
 
+test_window: src/test_window.c src/api/osm_api.c src/ui/window.c
+	$(CC) $(CFLAGS) src/test_window.c src/api/osm_api.c src/ui/window.c -o test_window $(LIBS)
+
 test_clean:
 	rm -f test_osm
