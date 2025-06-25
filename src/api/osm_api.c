@@ -2,24 +2,27 @@
 * @Author: karlosiric
 * @Date:   2025-06-24 11:25:04
 * @Last Modified by:   karlosiric
-* @Last Modified time: 2025-06-25 14:27:08
+* @Last Modified time: 2025-06-25 16:03:55
 */
 
 #include "../../include/api/osm_api.h"
+#include "../../include/core/data_structures.h"
 #include <stdlib.h>
 #include <string.h>
 
 static size_t write_callback(void *contents, size_t size, size_t nmemb, s_API_Response *response) {
     size_t total = size * nmemb;
-    response->data = realloc(response->data, response->size + total);
-    if (!response->data) {
+
+    char *new_data = realloc(response->data, response->size + total + 1);
+    if (!new_data) {
         fprintf(stderr, "Memory allocation failed: %s\n", strerror(errno));
-        return -1;
+        return 0;
     };
 
+    response->data = new_data;
     memcpy(response->data + response->size, contents, total);
     response->size += total;
-
+    response->data[response->size] = '\0';
     return total;
 }
 
@@ -37,7 +40,6 @@ int fetch_osm_data(const char *url, s_API_Response *response) {
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
-
 
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
@@ -201,7 +203,38 @@ int parse_osm_data(const char *data, s_LocationList *location_list) {
 
    cJSON_Delete(json);
    return location_list->count;
-
-
 }
+
+void free_location_list(s_LocationList *location_list) {
+    if (!location_list) {
+        return;
+    }
+
+    free(location_list->locations);
+    free(location_list);
+}
+
+s_Location *get_location_by_id(s_LocationList *location_list, int id) {
+    if (!location_list) {
+        return NULL;
+    }
+
+    for (int i = 0; i < (int)location_list->count; i++) {
+        if (location_list->locations[i].id == id) {
+            return &location_list->locations[i];
+        }
+    }
+
+    // not found
+    return NULL;
+}
+
+void free_api_response(s_API_Response *response) {
+    if (response && response->data) {
+        free(response->data);
+        response->data = NULL;
+        response->size = 0;
+    }
+}
+
 

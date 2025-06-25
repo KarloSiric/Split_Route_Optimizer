@@ -1,12 +1,12 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -g -02 -Iinclude
+CFLAGS = -Wall -Wextra -std=c99 -g -O2 -Iinclude -fsanitize=address
 LIBS = `pkg-config --cflags --libs cairo gtk+-3.0` -lcurl -lsqlite3 -lcjson
 
 # DIRECTORIES
 SRCDIR = src
 OBJDIR = obj
 SOURCES = $(wildcard $(SRCDIR)/*.c $(SRCDIR)/*/*.c)
-OBJECTS = $(SOURCES: $(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 TARGET = split_optimizer
 
 # Create object directory
@@ -36,3 +36,10 @@ install:
 
 run: $(TARGET)
 	./$(TARGET)
+
+# Add this at the end of your Makefile
+test: src/test_api.c src/api/osm_api.c
+	$(CC) $(CFLAGS) src/test_api.c src/api/osm_api.c -o test_osm $(LIBS)
+
+test_clean:
+	rm -f test_osm
