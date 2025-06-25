@@ -63,7 +63,7 @@ typedef struct {
     char website[256];         // URL if available
     char opening_hours[128];   // Hours if available
     char address[256];         // Full address if available
-    int stars;                 // Star rating if available
+    char stars;                 // Star rating if available
     int has_tourism;           // 1 if tourism field exists
     int has_historic;          // 1 if historic field exists
     int has_website;           // 1 if website field exists

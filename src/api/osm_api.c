@@ -2,7 +2,7 @@
 * @Author: karlosiric
 * @Date:   2025-06-24 11:25:04
 * @Last Modified by:   karlosiric
-* @Last Modified time: 2025-06-25 14:04:44
+* @Last Modified time: 2025-06-25 14:27:08
 */
 
 #include "../../include/api/osm_api.h"
@@ -94,41 +94,114 @@ int parse_osm_data(const char *data, s_LocationList *location_list) {
 
         // Get the tags objects 
         cJSON *tags = cJSON_GetObjectItem(element, "tags");
-        cJSON *name = cJSON_GetObjectItem(element, "name")->valuestring;
-        cJSON *tourism = cJSON_GetObjectItem(element, "tourism")->valuestring;
+        if (!tags) continue;
+
+
+        cJSON *name = cJSON_GetObjectItem(tags, "name");
+        cJSON *name_en = cJSON_GetObjectItem(tags, "name:en");
+        cJSON *address_city = cJSON_GetObjectItem(tags, "addr:city");
+        cJSON *address_housenumber = cJSON_GetObjectItem(tags, "addr:housenumber");
+        cJSON *address_postcode = cJSON_GetObjectItem(tags, "addr:postcode");
+        cJSON *address_street = cJSON_GetObjectItem(tags, "addr:street");
+        cJSON *stars = cJSON_GetObjectItem(tags, "stars");
+        cJSON *tourism_item = cJSON_GetObjectItem(tags, "tourism");
+        cJSON *historic = cJSON_GetObjectItem(tags, "historic");
+        cJSON* website = cJSON_GetObjectItem(tags, "website");
+        cJSON* opening_hours = cJSON_GetObjectItem(tags, "opening_hours");
+
+
+
 
         // Get a location struct with all this data
-        s_Location new_location;
+        s_Location new_location = {0};
         new_location.id = id;
         new_location.lat = lat;
         new_location.lon = lon;
-        strcpy(new_location.name, name);
-        strcpy(new_location.tourism_type, tourism);
 
-        // Add this location to our list 
+
+        // Now we check all the tags objects that our structure can hold
+
+        if (tourism_item) {
+            strcpy(new_location.tourism_type, tourism_item->valuestring);
+            new_location.has_tourism = 1;
+        } else {
+            strcpy(new_location.tourism_type, "");
+            new_location.has_tourism = 0;
+        }
+
+        if (historic) {
+            strcpy(new_location.historic_type, historic->valuestring);
+            new_location.has_historic = 1;
+        } else {
+            strcpy(new_location.historic_type, "");
+            new_location.has_historic = 0;
+        }
+
+        if (name) {
+            strcpy(new_location.name, name->valuestring);
+        } else {
+            strcpy(new_location.name, "");
+        }
+
+        if (name_en) {
+            strcpy(new_location.name_en, name_en->valuestring);
+        } else {
+            strcpy(new_location.name_en, "");
+        }
+
+        // Website
+        if (website) {
+            strcpy(new_location.website, website->valuestring);
+            new_location.has_website = 1;
+        } else {
+            strcpy(new_location.website, "");
+            new_location.has_website = 0;
+        }
+        
+        // Opening hours
+        if (opening_hours) {
+            strcpy(new_location.opening_hours, opening_hours->valuestring);
+            new_location.has_opening_hours = 1;
+        } else {
+            strcpy(new_location.opening_hours, "");
+            new_location.has_opening_hours = 0;
+        }
+        
+        // Stars
+        if (stars) {
+            new_location.stars = atoi(stars->valuestring);  // Convert string to int
+        } else {
+            new_location.stars = 0;
+        }
+        
+        // Build full address from parts
+        char full_address[256] = "";
+        if (address_housenumber) {
+            strcat(full_address, address_housenumber->valuestring);
+            strcat(full_address, " ");
+        }
+        if (address_street) {
+            strcat(full_address, address_street->valuestring);
+            strcat(full_address, ", ");
+        }
+        if (address_city) {
+            strcat(full_address, address_city->valuestring);
+            strcat(full_address, " ");
+        }
+        if (address_postcode) {
+            strcat(full_address, address_postcode->valuestring);
+        }
+        strcpy(new_location.address, full_address);
+        
+        // Add location to list
         location_list->locations[location_list->count] = new_location;
         location_list->count++;
+        
    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   cJSON_Delete(json);
+   return location_list->count;
 
 
 }
-
-
-
 
