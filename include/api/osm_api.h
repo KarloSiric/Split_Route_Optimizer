@@ -57,7 +57,17 @@ typedef struct {
     double lat;
     double lon;
     char name[256];
-    char tourism_type[64];
+    char name_en[256];         // English name if available
+    char tourism_type[64];     // "hotel", "museum", "attraction", etc.
+    char historic_type[64];    // "ruins", "monument", etc.
+    char website[256];         // URL if available
+    char opening_hours[128];   // Hours if available
+    char address[256];         // Full address if available
+    int stars;                 // Star rating if available
+    int has_tourism;           // 1 if tourism field exists
+    int has_historic;          // 1 if historic field exists
+    int has_website;           // 1 if website field exists
+    int has_opening_hours;     // 1 if opening_hours field exists
 } s_Location;
 
 typedef struct {
