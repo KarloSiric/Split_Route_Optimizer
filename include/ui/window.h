@@ -5,20 +5,19 @@
 #include <cairo/cairo.h>
 #include <stdbool.h>
 #include <gtk/gtk.h>
+#include <osmgpsmap-1.0/osm-gps-map.h>
 
 
 typedef struct {
     
     GtkWidget *window;
-    GtkWidget *drawing_area;
+    GtkWidget *map_widget;
 
     s_LocationList *locations;
 
     double center_lat, center_lon;
     double zoom_level;
     int window_width, window_height;
-
-    cairo_surface_t *map_surface;
 
     gboolean is_dragging;
     double last_mouse_x, last_mouse_y;

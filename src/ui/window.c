@@ -2,7 +2,7 @@
 * @Author: karlosiric
 * @Date:   2025-06-25 16:10:46
 * @Last Modified by:   karlosiric
-* @Last Modified time: 2025-06-25 22:09:48
+* @Last Modified time: 2025-06-25 22:34:32
 */
 
 #include "../../include/ui/window.h"
@@ -57,7 +57,6 @@ static gboolean draw_map(GtkWidget *widget, cairo_t *cr, gpointer user_data) {
 
     return 0;
 }
-
 
 
 void create_map_window(s_MapApp *app) {

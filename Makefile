@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -g -O2 -Iinclude -fsanitize=address
-LIBS = `pkg-config --cflags --libs cairo gtk+-3.0` -lcurl -lsqlite3 -lcjson
+LIBS = `pkg-config --cflags --libs cairo gtk+-3.0 osmgpsmap-1.0` -lcurl -lsqlite3 -lcjson
 
 # DIRECTORIES
 SRCDIR = src
