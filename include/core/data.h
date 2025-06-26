@@ -1,6 +1,9 @@
 #ifndef DATA_H
 #define DATA_H 
 
+#include <stdlib.h>
+#include <stdbool.h>
+
 typedef struct {
     int id;
     char type[10];
@@ -15,10 +18,12 @@ typedef struct {
 typedef struct {
     s_Location *locations;
     int count;
-    int capacity;
+    int size;
 } s_LocationList;
 
-typedef
+
+s_LocationList *create_location_list(size_t initial_list_size);
+bool parse_json_data(const char *json_data, s_LocationList *location_list_data);
 
 
 
