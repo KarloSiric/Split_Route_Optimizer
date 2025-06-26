@@ -18,6 +18,8 @@ typedef struct {
     int capacity;
 } s_LocationList;
 
+typedef
+
 
 
 
